@@ -2,8 +2,8 @@
 ; Author: Lukas Bergström
 
 ; utils.asm
-global _print
-global _exit_and_print_sdl_error
+global _utils_print
+global _utils_exit_and_print_sdl_error
 
 ; std
 extern _printf
@@ -18,14 +18,14 @@ section .data
 
 section .text
 
-_print: 
+_utils_print: 
     ; rdx will contain the address of the string to be printed
     mov rdi, rdx                 
     xor rax, rax ; Set 0 inputs
     call _printf
     ret
 
-_exit_and_print_sdl_error: 
+_utils_exit_and_print_sdl_error: 
     ; Get error message from SDL and print it
     ; rsi will contain the address of the format string
     call _SDL_GetError          
