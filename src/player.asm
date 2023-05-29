@@ -2,13 +2,13 @@
 ; Author: Lukas Bergström
 
 ; player.asm
-global _load_player
-global _free_player
-global _render_player
-global _move_player
+global _player_load
+global _player_free
+global _player_render
+global _player_move
 
 ; utils.asm
-extern _exit_and_print_sdl_error
+extern _utils_exit_and_print_sdl_error
 
 ; SDL 2
 extern _SDL_UpperBlit       ; (SDL_BlitSurface is a macro)
@@ -21,12 +21,12 @@ section .data
 
 section .bss
     player_surface          resq 1 
-    player_rect             resw 4   
+    player_rect             resb 32   
 
 section .text
 
-_load_player:
-    ; Loading BPM image
+_player_load:
+    ; Loading images
     mov rdi, img_path  ; src
     call _IMG_Load
     mov [rel player_surface], rax
@@ -36,7 +36,7 @@ _load_player:
     jz error   
 
     ; Init player rect
-    mov rax, 40
+    mov rax, 100
     mov rbx, 64
     mov [rel player_rect + 0 ], rax  ;   x
     mov [rel player_rect + 4 ], rax  ;   y
@@ -45,21 +45,26 @@ _load_player:
 
     ret
 
-_free_player:
+_player_free:
     ; Free player image
     mov rdi, [rel player_surface] 
     call _SDL_FreeSurface
+    ret
 
-_render_player:
+_player_render:
     mov rdx, rdi                    ; dst (input)
     mov rdi, [rel player_surface]   ; src
     mov rsi, 0                      ; rect
     mov rcx, player_rect            ; dstrect
     call _SDL_UpperBlit             ; error code?? 0 on success? 
     
+    ; Check for errors
+    test rax, rax                   
+    jnz error
+
     ret
 
-_move_player:
+_player_move:
 
     mov r8,  [rel player_rect + 0]
     mov r9,  [rel player_rect + 4]
@@ -96,14 +101,30 @@ _move_player:
     jne not_scancode_W
     sub r9, 5
     not_scancode_W:
-    
-    ; Update player position
+
+    ; Update player in x-position
+    ; Reference point is top-left corner
+    ; if 64 < x < 640 - 64 * 2
+    cmp r8d, 64   
+    jl no_x_move 
+    cmp r8d, 512   
+    jg no_x_move 
     mov [rel player_rect + 0], r8
+    no_x_move:
+
+    ; Update player in x-position
+    ; Reference point is top-left corner
+    ; if 64 < y < 480 - 64 * 2
+    cmp r9d, 64   
+    jl no_y_move 
+    cmp r9d, 352   
+    jg no_y_move 
     mov [rel player_rect + 4], r9
+    no_y_move:
 
     ret
 
 error:
     push rbp
     mov rbp, rsp
-    call _exit_and_print_sdl_error
+    call _utils_exit_and_print_sdl_error

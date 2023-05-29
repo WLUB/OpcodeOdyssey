@@ -1,10 +1,10 @@
 ; Created: 2023-05-29
 ; Author: Lukas Bergström
 
-; window_sdl.asm
-global _init_sdl
-global _create_window
-global _create_window_surface
+; window.asm
+global _window_init_sdl
+global _window_create
+global _window_create_surface
 
 ; SDL2
 extern _SDL_Init
@@ -18,13 +18,13 @@ section .data
 
 section .text
 
-_init_sdl:
+_window_init_sdl:
     ; Initialize the SDL library
     mov rdi, 0x0000F231 ; SDL_INIT_EVERYTHING
     call _SDL_Init      ; Return 0 on success
     ret
 
-_create_window:
+_window_create:
     ; Create a window
     mov rdi, window_title   ; title
     mov esi, 0              ; x
@@ -36,7 +36,7 @@ _create_window:
 
     ret
 
-_create_window_surface:
+_window_create_surface:
     ; Create a window surface
     call _SDL_GetWindowSurface
 
