@@ -7,8 +7,9 @@ global _main
 ; player.asm
 extern _player_load
 extern _player_free
-extern _player_render
 extern _player_move
+extern _player_render
+extern _player_update
 
 ; background.asm
 extern _background_load
@@ -48,6 +49,13 @@ _main:
 
 main_loop:
     main_loop_inner:
+        ; call render
+        call render
+
+        ; A small Delay                               
+        mov rdi, 16      
+        call _SDL_Delay 
+
         ; Poll for events
         ; Load the address of 'event' into rdi
         mov rdi, event         
@@ -62,22 +70,21 @@ main_loop:
         je main_loop_quit
 
         ; Check if the user has used keyboard
+        cmp dword [rel event], 0x301    ; SDL_KEYUP       
+        je key_search  
+
+        ; Check if the user has used keyboard
         cmp dword [rel event], 0x300    ; SDL_KEYDOWN       
         jne no_keydown  
 
-        push rbp    
-        mov rbp, rsp 
-        call _player_move  
-        pop rbp
+        key_search: 
+            push rbp    
+            mov rbp, rsp 
+            call _player_move  
+            pop rbp
 
         no_keydown:
     
-        ; call render
-        call render
-
-        ; A small Delay                               
-        mov rdi, 1      
-        call _SDL_Delay 
 
         jmp main_loop_inner
     main_loop_quit:
@@ -89,6 +96,9 @@ render:
 
     mov rdi, [rel window_surface]  
     call _background_render
+
+    call _player_update
+
 
     mov rdi, [rel window_surface]  
     call _player_render
