@@ -51,7 +51,7 @@ The code is structured in assembly with the following sections:
 
 2. `.bss`: This section includes variables which are not initialized yet. It includes window settings and player variables.
 
-3. `.text`: This is the code section. It contains the main function, which initializes SDL, creates the window and player, enters the main game loop, and performs cleanup at the end. The game loop handles events and player input, updates the screen, and checks for the end of the game.
+3. `.text`: This is the code section.
 
 ## Built With
 

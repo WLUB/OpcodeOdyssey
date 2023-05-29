@@ -20,12 +20,12 @@ extern _IMG_Load
 section .data
     img_path                db "./assets/player.png",0
     speed                   equ 5
-
+    
 section .bss
     player_surface          resq 1 
     player_rect             resb 32 
     player_dir              resb 4 
-
+    
 section .text
 
 _player_load:
