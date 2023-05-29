@@ -21,7 +21,7 @@ You'll need to have the following installed to run Opcode Odyssey:
 ```bash
 make all
 ```
-This will generate the object file `main.o` and the executable `main`.
+This will generate the object files and the executable `main`.
 
 ## How to Play
 
@@ -71,7 +71,7 @@ To remove the object and executable files, run:
 ```bash
 make clean
 ```
-This will remove `main.o` and `main` files.
+This will remove the object files and the executable `main`.
 
 ## Future Work
 
