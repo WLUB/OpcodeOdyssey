@@ -2,7 +2,7 @@ CC=nasm
 LD=ld
 
 CFLAGS=-f macho64
-LDFLAGS=-no_pie -macosx_version_min 13.0 -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib -lSystem -lSDL2 
+LDFLAGS=-no_pie -macosx_version_min 13.0 -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib -lSystem -lSDL2 -lSDL2_image 
 
 SOURCES=$(wildcard src/**/*.asm src/*.asm)
 OBJECTS=$(patsubst %.asm,%.o,$(SOURCES))

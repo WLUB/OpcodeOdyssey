@@ -12,6 +12,8 @@ You'll need to have the following installed to run Opcode Odyssey:
 
 2. SDL2: A cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
 
+3. SDL2_image: An SDL2 extension library which provides the loading of images in various formats.
+
 ### Installation
 
 1. First, clone this repository to your local machine using `git clone`.
@@ -55,6 +57,8 @@ The code is structured in assembly with the following sections:
 - [NASM](https://www.nasm.us/) - The Netwide Assembler, NASM, is an 80x86 and x86-64 assembler designed for portability and modularity.
 
 - [SDL2](https://www.libsdl.org/) - A cross-platform development library designed to provide low level access to audio, keyboard, mouse, joystick, and graphics hardware via OpenGL and Direct3D.
+
+- [SDL2_image](https://wiki.libsdl.org/SDL2_image/FrontPage) - An SDL2 extension library which enables the loading of images in various formats.
 
 ## Authors
 

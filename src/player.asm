@@ -12,18 +12,15 @@ extern _exit_and_print_sdl_error
 
 ; SDL 2
 extern _SDL_UpperBlit       ; (SDL_BlitSurface is a macro)
-extern _SDL_RWFromFile
-extern _SDL_LoadBMP_RW 
 extern _SDL_FreeSurface
 extern _SDL_GetKeyboardState
+extern _IMG_Load
 
 section .data
-    img_path                db "./assets/player.bmp",0
-    img_mode                db "r",0
+    img_path                db "./assets/player.png",0
 
 section .bss
-    ; Player variables
-    player_img              resq 1 
+    player_surface          resq 1 
     player_rect             resw 4   
 
 section .text
@@ -31,17 +28,8 @@ section .text
 _load_player:
     ; Loading BPM image
     mov rdi, img_path  ; src
-    mov rsi, img_mode  ; mode 
-    call _SDL_RWFromFile
-
-    ; Check for errors
-    test rax, rax                   
-    jz error   
-
-    mov rdi, rax  ; src
-    mov rsi, 1    ; freesrc
-    call _SDL_LoadBMP_RW
-    mov [rel player_img], rax
+    call _IMG_Load
+    mov [rel player_surface], rax
 
     ; Check for errors
     test rax, rax                   
@@ -50,25 +38,24 @@ _load_player:
     ; Init player rect
     mov rax, 40
     mov rbx, 64
-    mov [rel player_rect],     rax  ;   x
-    mov [rel player_rect+4],   rax  ;   y
-    mov [rel player_rect+8],   rbx  ;   w
-    mov [rel player_rect+12],  rbx  ;   h
+    mov [rel player_rect + 0 ], rax  ;   x
+    mov [rel player_rect + 4 ], rax  ;   y
+    mov [rel player_rect + 8 ], rbx  ;   w
+    mov [rel player_rect + 12], rbx  ;   h
 
     ret
 
 _free_player:
     ; Free player image
-    mov rdi, [rel player_img] 
+    mov rdi, [rel player_surface] 
     call _SDL_FreeSurface
 
 _render_player:
-    mov rdx, rdi                ; dst (input)
-    mov rdi, [rel player_img]   ; src
-    mov rsi, 0                  ; rect
-    mov rcx, player_rect        ; dstrect
-    call _SDL_UpperBlit         ; error code?? 0 on success? 
-
+    mov rdx, rdi                    ; dst (input)
+    mov rdi, [rel player_surface]   ; src
+    mov rsi, 0                      ; rect
+    mov rcx, player_rect            ; dstrect
+    call _SDL_UpperBlit             ; error code?? 0 on success? 
     
     ret
 
@@ -117,4 +104,6 @@ _move_player:
     ret
 
 error:
+    push rbp
+    mov rbp, rsp
     call _exit_and_print_sdl_error
