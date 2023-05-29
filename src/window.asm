@@ -1,6 +1,3 @@
-; Created: 2023-05-29
-; Author: Lukas Bergström
-
 ; window.asm
 global _window_init_sdl
 global _window_create
@@ -33,11 +30,9 @@ _window_create:
     mov r8d, height         ; h
     mov r9d, 0              ; flags 
     call _SDL_CreateWindow  ; 0 on error
-
     ret
 
 _window_create_surface:
     ; Create a window surface
     call _SDL_GetWindowSurface
-
     ret
