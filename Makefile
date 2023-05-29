@@ -4,14 +4,16 @@ LD=ld
 CFLAGS=-f macho64
 LDFLAGS=-no_pie -macosx_version_min 13.0 -L/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/usr/lib -lSystem -lSDL2 
 
-SRC=src/main.asm
-OBJ=main.o
+SOURCES=$(wildcard src/**/*.asm src/*.asm)
+OBJECTS=$(patsubst %.asm,%.o,$(SOURCES))
 
-all: $(OBJ)
-	$(LD) $(LDFLAGS) -o main $(OBJ)
+all: main
 
-$(OBJ): $(SRC)
-	$(CC) $(CFLAGS) $(SRC) -o $(OBJ)
+main: $(OBJECTS)
+	$(LD) $(LDFLAGS) -o $@ $(OBJECTS)
+
+%.o : %.asm
+	$(CC) $(CFLAGS) $< -o $@
 
 clean:
-	rm -f $(OBJ) main
+	rm -f $(OBJECTS) main
