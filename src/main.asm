@@ -106,9 +106,9 @@ render:
 
     ; Clean screen
     mov rdi, [rel window_surface]   ; window_surface
-    add rdi, 32                 ; window_surface->format (jump 32 bit)
-                                ; Feels like i should be able to do
-                                ; [rel window_surface + 4]
+    add rdi, 32                     ; window_surface->format (jump 32 bit)
+                                    ; Feels like i should be able to do
+                                    ; [rel window_surface + 4]
 
     mov rsi, 0
     mov rdx, 0
