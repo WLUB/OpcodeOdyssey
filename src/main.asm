@@ -11,6 +11,12 @@ extern _player_move
 extern _player_render
 extern _player_update
 
+; redball.asm
+extern _redball_load
+extern _redball_free
+extern _redball_render
+extern _redball_update
+
 ; background.asm
 extern _background_load
 extern _background_free
@@ -98,10 +104,13 @@ render:
     call _background_render
 
     call _player_update
-
+    call _redball_update
 
     mov rdi, [rel window_surface]  
     call _player_render
+
+    mov rdi, [rel window_surface]  
+    call _redball_render
 
     ; Redraw the window
     mov rdi, [rel window_id]        
@@ -140,7 +149,7 @@ clean_up:
     
     call _player_free
     call _background_free
-
+    call _redball_free
     pop rbp
 
     ;  Quit SDL
@@ -179,8 +188,9 @@ init:
     jz error
     
     ; Init objects...
-    call _player_load
     call _background_load
+    call _player_load
+    call _redball_load
 
     pop rbp
     ret

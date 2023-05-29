@@ -41,6 +41,7 @@ The player controls are quite simple and are based on the keyboard keys:
 - `D`: Move player to the right.
 - `S`: Move player down.
 - `W`: Move player up.
+- Throw a ball using the arrow keys
 
 ## Code Description
 

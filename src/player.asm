@@ -8,6 +8,9 @@ global _player_move
 global _player_render
 global _player_update
 
+; redball.asm
+extern _redball_spawn
+
 ; utils.asm
 extern _utils_exit_and_print_sdl_error
 
@@ -129,6 +132,51 @@ _player_move:
     mov rdi, 0      ; nullptr
     call _SDL_GetKeyboardState
 
+    ; Remake this code to less redundant?
+    ; SDL_SCANCODE_RIGHT (79)
+    add rax, 79  
+    cmp dword [rax], 1
+    jne no_redball_r
+    mov rdi, [rel player_rect + 0]
+    mov rsi, [rel player_rect + 4]
+    mov rdx, 0b0100
+    call _redball_spawn
+    no_redball_r:
+    sub rax, 79  
+
+    ; SDL_SCANCODE_LEFT (80)
+    add rax, 80  
+    cmp dword [rax], 1
+    jne no_redball_l
+    mov rdi, [rel player_rect + 0]
+    mov rsi, [rel player_rect + 4]
+    mov rdx, 0b1000
+    call _redball_spawn
+    no_redball_l:
+    sub rax, 80  
+    
+    ; SDL_SCANCODE_DOWN (81)
+    add rax, 81  
+    cmp dword [rax], 1
+    jne no_redball_d
+    mov rdi, [rel player_rect + 0]
+    mov rsi, [rel player_rect + 4]
+    mov rdx, 0b0001
+    call _redball_spawn
+    no_redball_d:
+    sub rax, 81  
+
+    ; SDL_SCANCODE_UP (82)
+    add rax, 82  
+    cmp dword [rax], 1
+    jne no_redball_u
+    mov rdi, [rel player_rect + 0]
+    mov rsi, [rel player_rect + 4]
+    mov rdx, 0b0010
+    call _redball_spawn
+    no_redball_u:
+    sub rax, 82 
+
     mov r8, 0
     
     ; SDL_SCANCODE_A (4)
@@ -159,7 +207,7 @@ _player_move:
     or r8, 0b0010
     not_scancode_W:
 
-    mov [rel player_dir], r8
+    mov [rel player_dir], r8d
 
     ret
 
