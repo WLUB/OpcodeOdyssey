@@ -1,6 +1,3 @@
-; Created: 2023-05-29
-; Author: Lukas Bergström
-
 ; background.asm
 global _background_load
 global _background_free
@@ -25,7 +22,7 @@ section .bss
 section .text
 
 _background_load:
-    ; Loading images
+    ; Load image
     mov rdi, img_path  ; src
     call _IMG_Load
     mov [rel background_surface], rax
@@ -35,9 +32,10 @@ _background_load:
     jz error   
 
     ; Init background rect
+    ; Cover screen
     mov rax, 0
-    mov rbx, 640
-    mov rcx, 480
+    mov rbx, 640    ; This is bad, we want to 
+    mov rcx, 480    ; sync the values with window.asm
     mov [rel background_rect + 0 ], rax  ;   x
     mov [rel background_rect + 4 ], rax  ;   y
     mov [rel background_rect + 8 ], rbx  ;   w
@@ -46,7 +44,7 @@ _background_load:
     ret
 
 _background_free:
-    ; Free background image
+    ; Free the background image
     mov rdi, [rel background_surface] 
     call _SDL_FreeSurface
     ret

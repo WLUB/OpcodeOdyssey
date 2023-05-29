@@ -1,6 +1,3 @@
-; Created: 2023-05-29
-; Author: Lukas Bergström
-
 ; player.asm
 global _player_load
 global _player_free
@@ -23,14 +20,16 @@ extern _IMG_Load
 section .data
     img_path                db "./assets/player.png",0
     speed                   equ 5
+
 section .bss
     player_surface          resq 1 
     player_rect             resb 32 
     player_dir              resb 4 
+
 section .text
 
 _player_load:
-    ; Loading images
+    ; Load image
     mov rdi, img_path  ; src
     call _IMG_Load
     mov [rel player_surface], rax
@@ -40,7 +39,7 @@ _player_load:
     jz error   
 
     ; Init player rect
-    mov rax, 100
+    mov rax, 100 
     mov rbx, 64
     mov [rel player_rect + 0 ], rax  ;   x
     mov [rel player_rect + 4 ], rax  ;   y
@@ -72,7 +71,7 @@ _player_update:
     mov r8,  [rel player_rect + 0]
     mov r9,  [rel player_rect + 4]
 
-    ; Controll that we are moving
+    ; We need a dir to be able to move.
     mov ax, [rel player_dir]
     cmp ax, 0
     je update_end
@@ -128,11 +127,12 @@ _player_update:
     ret
 
 _player_move:
+    ; TODO: Refactor _player_move.
+    
     ; Fetch key array 
     mov rdi, 0      ; nullptr
     call _SDL_GetKeyboardState
 
-    ; Remake this code to less redundant?
     ; SDL_SCANCODE_RIGHT (79)
     add rax, 79  
     cmp dword [rax], 1

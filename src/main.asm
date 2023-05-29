@@ -1,6 +1,3 @@
-; Created: 2023-05-28 
-; Author: Lukas Bergström
-
 ; main.asm
 global _main
 
@@ -55,10 +52,11 @@ _main:
 
 main_loop:
     main_loop_inner:
-        ; call render
+        ; Call renderer
         call render
 
-        ; A small Delay                               
+        ; A small Delay to get ~60 fps 
+        ; We don't need to be so precise                            
         mov rdi, 16      
         call _SDL_Delay 
 
@@ -88,18 +86,17 @@ main_loop:
             mov rbp, rsp 
             call _player_move  
             pop rbp
-
         no_keydown:
     
-
         jmp main_loop_inner
     main_loop_quit:
-        ret  ; Return to Main on quit    
+        ret  ; Return to _main   
 
 render:  
     push rbp    
     mov rbp, rsp 
-
+    
+    ; Render background first
     mov rdi, [rel window_surface]  
     call _background_render
 
@@ -146,13 +143,13 @@ render:
 clean_up:
     push rbp    
     mov rbp, rsp 
-    
+    ; Free all the images
     call _player_free
     call _background_free
     call _redball_free
     pop rbp
 
-    ;  Quit SDL
+    ; Quit SDL
     mov rdi, [rel window_id]         
     call _SDL_DestroyWindow 
     call _SDL_Quit   

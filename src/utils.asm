@@ -1,6 +1,3 @@
-; Created: 2023-05-29
-; Author: Lukas Bergström
-
 ; utils.asm
 global _utils_print
 global _utils_exit_and_print_sdl_error
@@ -40,6 +37,7 @@ _utils_exit_and_print_sdl_error:
     call _SDL_Quit
 
     ; Exit the program
+    ; Mac OS 
     mov eax, 0x2000001  ; System call number for exit
     mov edi, 1          ; Exit status 1 
     syscall             ; Invoke the system call

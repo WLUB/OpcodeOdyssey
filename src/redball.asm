@@ -1,6 +1,3 @@
-; Created: 2023-05-29
-; Author: Lukas Bergström
-
 ; redball.asm
 global _redball_load
 global _redball_free
@@ -30,7 +27,7 @@ section .bss
 section .text
 
 _redball_load:
-    ; Loading images
+    ; Load image
     mov rdi, img_path  ; src
     call _IMG_Load
     mov [rel redball_surface], rax
@@ -48,6 +45,7 @@ _redball_load:
     mov [rel redball_rect + 8 ], rbx  ;   w
     mov [rel redball_rect + 12], rbx  ;   h
     
+    ; Make it available
     mov ch, 1
     mov [rel redball_available], ch
     
@@ -60,8 +58,9 @@ _redball_free:
     ret
 
 _redball_spawn:
-
     ; Make sure we can only fire one at a time
+    ; We don't have any system in place to spawn 
+    ; more then one... 
     cmp BYTE [rel redball_available], 1
     jne redball_spawn_end
 
@@ -69,6 +68,7 @@ _redball_spawn:
     mov [rel redball_rect + 4 ], esi  ;   y (input)
     mov [rel redball_dir], edx        ;   direction (input)
 
+    ; Make the ball unavailable
     mov bh, 0
     mov [rel redball_available], bh
 
@@ -93,7 +93,7 @@ _redball_update:
     mov r8,  [rel redball_rect + 0]
     mov r9,  [rel redball_rect + 4]
 
-    ; Controll that we are moving
+    ; We need a dir to be able to move.
     mov ax, [rel redball_dir]
     cmp ax, 0
     je update_end
@@ -135,7 +135,6 @@ _redball_update:
     jg destory 
     mov [rel redball_rect + 0], r8d
     
-
     ; Update redball in x-position
     ; Reference point is top-left corner
     ; if 64 < y < 480 - 64 * 2
