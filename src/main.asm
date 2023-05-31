@@ -100,7 +100,12 @@ render:
     mov rdi, [rel window_surface]  
     call _background_render
 
+    ; Player update will return 
+    ; it's position as a pointer.
+    ; We should probably do a 
+    ; separate function "get_position"
     call _player_update
+    mov rdi, rax 
     call _redball_update
 
     mov rdi, [rel window_surface]  
