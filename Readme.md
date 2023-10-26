@@ -2,6 +2,8 @@
 
 A basic game developed using x86 assembly for MacOS. This project is intended as a learning exercise for understanding assembly language. 
 
+![Opcode Odyssey](./assets/demo.png)
+
 ## Getting Started
 
 ### Prerequisites
